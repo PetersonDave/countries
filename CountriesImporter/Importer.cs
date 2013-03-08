@@ -13,6 +13,7 @@ namespace CountriesImporter
 	public class Importer
     {
 		private ImporterSettings _importerSettings;
+		private Database _db;
 
 		public Importer(ImporterSettings importerSettings)
 		{
@@ -35,43 +36,45 @@ namespace CountriesImporter
 			{
 				using (new SecurityDisabler())
 				{
-					var db = Sitecore.Data.Database.GetDatabase(_importerSettings.DatabaseName);
-					if (db != null)
+					_db = Sitecore.Data.Database.GetDatabase(_importerSettings.DatabaseName);
+					if (_db != null)
 					{
-						ProcessCountries(db, countries);
+						ProcessCountries(countries);
 					}
 				}
 			}
 		}
 
-		private void ProcessCountries(Database db, List<Country> countries)
+		private void ProcessCountries(List<Country> countries)
 		{
-			var parent = db.Items[_importerSettings.CountriesParentItemPath];
-			var template = db.Templates[_importerSettings.CountryTemplatePath];
+			var parent = _db.Items[_importerSettings.CountriesParentItemPath];
+			var template = _db.Templates[_importerSettings.CountryTemplatePath];
 
 			bool isItemAndTemplateValid = parent != null && template != null;
 			if (isItemAndTemplateValid)
 			{
 				foreach (var country in countries)
 				{
-					TransferCountryToSitecoreItem(country, db, parent, template);
+					TransferCountryToSitecoreItem(country, parent, template);
 				}
 			}
 		}
 
-		private void TransferCountryToSitecoreItem(Country country, Database db, Item parent, TemplateItem template)
+		private void TransferCountryToSitecoreItem(Country country, Item parent, TemplateItem template)
 		{
 			var countryName = RemoveSpecialCharacters(country.Name);
-			var countryItem = db.Items[string.Concat(parent.Paths.ContentPath, "/", countryName)] ?? parent.Add(countryName, template);
+			var countryItem = _db.Items[string.Concat(parent.Paths.ContentPath, "/", countryName)] ?? parent.Add(countryName, template);
 			if (countryItem != null)
 			{
-				Type TCountry = country.GetType();
-				foreach (PropertyInfo pi in TCountry.GetProperties())
+				using (new EditContext(countryItem))
 				{
-					bool isFieldValid = countryItem.Fields[pi.Name] != null && pi.GetValue(country, null) != null;
-					if (isFieldValid)
+					countryItem.Appearance.DisplayName = countryName.Replace("-", " ");
+
+					Type TCountry = country.GetType();
+					foreach (PropertyInfo pi in TCountry.GetProperties())
 					{
-						using (new EditContext(countryItem))
+						bool isFieldValid = countryItem.Fields[pi.Name] != null && pi.GetValue(country, null) != null;
+						if (isFieldValid)
 						{
 							countryItem.Fields[pi.Name].Value = pi.GetValue(country, null).ToString();
 						}
