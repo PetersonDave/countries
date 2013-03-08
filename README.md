@@ -1,4 +1,4 @@
-# Sitecore Countries Importer generate country Sitecore items using values representing ISO codes and country-specific information.
+# Sitecore Countries Importer generates country Sitecore items using country-specific data such as ISO, currency, calling code and region.
 
 Install items and template directly, or install the template and generate the items youreslf. See below for details:
 
@@ -10,8 +10,8 @@ The package **packaes/Countries-Template-and-Repository-Items-1** contains count
 
 Install the package **packaes/Countries-Template-Only-1** to bring over the template only, allowing to generate the items yourself. To generate the country items, execute the code below against the JSON countries list:
 
-<code>
-var settings = new CountriesImporter.ImporterSettings()
+
+    var settings = new CountriesImporter.ImporterSettings()
 	{
 		Context = HttpContext.Current,
 		CountriesJsonPath = "/countries/countries.json",			// path relative to your web project where JSON extract lives
@@ -20,9 +20,9 @@ var settings = new CountriesImporter.ImporterSettings()
 		DatabaseName = "master"							// database context
 	};
 
-var importer = new CountriesImporter.Importer(settings);
-importer.Import();
-</code>
+    var importer = new CountriesImporter.Importer(settings);
+    importer.Import();
+
 
 # Countries data
 This repository contains lists of world countries in JSON, CSV and XML. Each line contains the country:
