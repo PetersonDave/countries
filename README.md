@@ -1,4 +1,6 @@
-# Sitecore Countries Importer generates country Sitecore items using country-specific data such as ISO, currency, calling code and region.
+# Sitecore Countries Importer
+
+Generates country Sitecore items using country-specific data such as ISO, currency, calling code and region.
 
 Install items and template directly, or install the template and generate the items youreslf. See below for details:
 
