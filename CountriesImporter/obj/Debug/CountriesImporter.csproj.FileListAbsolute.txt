@@ -1,0 +1,5 @@
+C:\Projects\countries\CountriesImporter\bin\Debug\CountriesImporter.dll
+C:\Projects\countries\CountriesImporter\bin\Debug\CountriesImporter.pdb
+C:\Projects\countries\CountriesImporter\obj\Debug\CountriesImporter.csprojResolveAssemblyReference.cache
+C:\Projects\countries\CountriesImporter\obj\Debug\CountriesImporter.dll
+C:\Projects\countries\CountriesImporter\obj\Debug\CountriesImporter.pdb
